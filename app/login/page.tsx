@@ -3,7 +3,7 @@ import  { FormComponent } from './form';
 
 const LoginPage = () => {
   return (
-    <div>
+    <div className="flex justify-center items-center min-h-screen">
       <FormComponent />
     </div>
   );

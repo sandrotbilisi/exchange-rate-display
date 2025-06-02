@@ -35,8 +35,9 @@ export function FormComponent() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormInput control={form.control} name="username" label="Username" placeholder="Enter your username" description="This is your public display name." />
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
+        <FormInput control={form.control} name="username" label="Username" placeholder="Enter your username"  />
+        <FormInput control={form.control} name="password" label="Password" placeholder="Enter your Password"  />
         <Button type="submit">Submit</Button>
       </form>
     </Form>
