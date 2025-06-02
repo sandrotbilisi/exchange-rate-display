@@ -5,7 +5,6 @@ const LoginPage = () => {
   return (
     <div>
       <FormComponent />
-      {/* <Button>Login</Button> */}
     </div>
   );
 };
