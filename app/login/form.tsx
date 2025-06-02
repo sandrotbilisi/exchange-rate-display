@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { FormInput } from "@/components/ui/form/formInput"
+import { toast } from "sonner"
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -32,6 +33,28 @@ export function FormComponent() {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values)
+    
+    const myPromise = new Promise<{ name: string }>((resolve, reject) => {
+        
+        setTimeout(() => {
+          resolve({ name: 'My toast' });
+        }, 3000);
+      });
+
+      toast.promise(myPromise, {
+        loading: 'Loading...',
+        
+        success: (data: { name: string }) => {
+          return {
+            message: `Logged In`,
+            position: "top-center",
+            duration : 1300,
+          };
+        },
+        
+        error: 'Error',
+
+      });
   }
 
   return (
