@@ -30,17 +30,17 @@ import SidebarHeaderCustom from "@/components/dashboard/sidebar/header";
 const items = [
   {
     title: "Branches",
-    url: "#",
+    url: "/branches",
     icon: Building,
   },
   {
     title: "Tables",
-    url: "#",
+    url: "/tables",
     icon: Table,
   },
   {
     title: "Links",
-    url: "#",
+    url: "/links",
     icon: Link,
   },
 ];
@@ -48,7 +48,7 @@ const items = [
 const Dashboard = () => {
   return (
     <div>
-      <Sidebar>
+      <Sidebar collapsible="icon">
         <SidebarHeader>
           <SidebarHeaderCustom />
         </SidebarHeader>
