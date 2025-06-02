@@ -10,6 +10,9 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar"
 
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -31,6 +34,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
+    <SidebarProvider>
+      
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ThemeProvider
@@ -43,20 +48,12 @@ export default function RootLayout({
           <div className="fixed top-4 right-4 z-50">
             <ModeToggle />
           </div>
-          <div className="fixed top-4 left-4 z-50 flex items-center gap-2">
-            {/* avatar */}
-            <div className="flex items-center gap-2">
-              <Avatar>
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
-              <p className="text-sm font-medium">John Doe</p>
-            </div>
-          </div>
 
           {children}
           <Toaster position="top-center" offset={20}  />
         </ThemeProvider>
       </body>
     </html>
+    </SidebarProvider>
   )
 }

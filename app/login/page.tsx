@@ -1,9 +1,9 @@
-import  { FormComponent } from './form';
+import { FormComponent } from "./form";
 
 const LoginPage = () => {
   return (
-    <div className="flex justify-center items-center min-h-screen">
-        {/* <ModeToggle /> */}
+    <div className="flex justify-center items-center min-h-screen w-full">
+      {/* <ModeToggle /> */}
       <FormComponent />
     </div>
   );
