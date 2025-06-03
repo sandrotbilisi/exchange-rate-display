@@ -69,11 +69,11 @@ export default function AddLinkDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Add Link</Button>
+        <Button>Create Link</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add New Link</DialogTitle>
+          <DialogTitle>Create New Link</DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
@@ -81,20 +81,6 @@ export default function AddLinkDialog() {
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-4 py-4"
           >
-            <FormField
-              control={form.control}
-              name="url"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>URL</FormLabel>
-                  <FormControl>
-                    <Input placeholder="https://example.com" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
             <FormField
               control={form.control}
               name="branchId"
