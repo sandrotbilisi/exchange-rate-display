@@ -26,7 +26,7 @@ const items = [
   },
   {
     title: "Tables",
-    url: "/tables",
+    url: "/dashboard/tables",
     icon: Table,
   },
   {
