@@ -24,6 +24,7 @@ export type RateTable = {
     buyRate: number;
     sellRate: number;
     notableRate: number;
+    image: string | null;
   }[];
   createdAt: string;
   updatedAt?: string;

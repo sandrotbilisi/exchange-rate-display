@@ -1,3 +1,4 @@
+// AddTableDialog.tsx
 "use client";
 
 import { useState } from "react";
@@ -32,14 +33,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import ImageSelector from "@/components/ui/ImageSelector";
 
-// 🔐 Schema aligned with RateTable currencies
 const currencySchema = z.object({
   code: z.string().min(1, { message: "Required" }),
   label: z.string().min(1, { message: "Required" }),
   buyRate: z.string().min(1, { message: "Required" }),
   sellRate: z.string().min(1, { message: "Required" }),
   notableRate: z.string().min(1, { message: "Required" }),
+  image: z.string().nullable(),
 });
 
 const formSchema = z.object({
@@ -63,6 +65,7 @@ export default function AddTableDialog() {
           buyRate: "",
           sellRate: "",
           notableRate: "",
+          image: null,
         },
       ],
     },
@@ -95,7 +98,6 @@ export default function AddTableDialog() {
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-6 py-4"
           >
-            {/* Table Name */}
             <FormField
               control={form.control}
               name="name"
@@ -110,12 +112,12 @@ export default function AddTableDialog() {
               )}
             />
 
-            {/* Currencies in Table */}
             <div className="rounded-md border overflow-auto">
               <Table>
                 <TableHeader>
                   <TableRow>
                     <TableHead>Photo</TableHead>
+                    <TableHead>Country Name</TableHead>
                     <TableHead>Currency</TableHead>
                     <TableHead>Buy Rate</TableHead>
                     <TableHead>Sell Rate</TableHead>
@@ -124,75 +126,104 @@ export default function AddTableDialog() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {fields.map((field, index) => (
-                    <TableRow key={field.id}>
-                      <TableCell>
-                        <FormField
-                          control={form.control}
-                          name={`currencies.${index}.code`}
-                          render={({ field }) => (
-                            <FormControl>
-                              <Input placeholder="USD" {...field} />
-                            </FormControl>
-                          )}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <FormField
-                          control={form.control}
-                          name={`currencies.${index}.label`}
-                          render={({ field }) => (
-                            <FormControl>
-                              <Input placeholder="US Dollar" {...field} />
-                            </FormControl>
-                          )}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <FormField
-                          control={form.control}
-                          name={`currencies.${index}.buyRate`}
-                          render={({ field }) => (
-                            <FormControl>
-                              <Input placeholder="1.25" {...field} />
-                            </FormControl>
-                          )}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <FormField
-                          control={form.control}
-                          name={`currencies.${index}.sellRate`}
-                          render={({ field }) => (
-                            <FormControl>
-                              <Input placeholder="1.35" {...field} />
-                            </FormControl>
-                          )}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <FormField
-                          control={form.control}
-                          name={`currencies.${index}.notableRate`}
-                          render={({ field }) => (
-                            <FormControl>
-                              <Input placeholder="1.30" {...field} />
-                            </FormControl>
-                          )}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <Button
-                          type="button"
-                          variant="destructive"
-                          size="sm"
-                          onClick={() => remove(index)}
-                        >
-                          Remove
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  {fields.map((field, index) => {
+                    // read this row’s current image:
+                    const currentImage = form.watch(
+                      `currencies.${index}.image`
+                    );
+
+                    return (
+                      <TableRow key={field.id}>
+                        <TableCell>
+                          <FormControl>
+                            <ImageSelector
+                              selected={currentImage}
+                              onChange={(item) => {
+                                form.setValue(
+                                  `currencies.${index}.code`,
+                                  item.currency
+                                );
+                                form.setValue(
+                                  `currencies.${index}.label`,
+                                  item.country
+                                );
+                                // **set only this row’s image field**:
+                                form.setValue(
+                                  `currencies.${index}.image`,
+                                  item.src
+                                );
+                              }}
+                            />
+                          </FormControl>
+                        </TableCell>
+                        <TableCell>
+                          <FormField
+                            control={form.control}
+                            name={`currencies.${index}.label`}
+                            render={({ field }) => (
+                              <FormControl>
+                                <Input placeholder="Country name" {...field} />
+                              </FormControl>
+                            )}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <FormField
+                            control={form.control}
+                            name={`currencies.${index}.code`}
+                            render={({ field }) => (
+                              <FormControl>
+                                <Input placeholder="Currency code" {...field} />
+                              </FormControl>
+                            )}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <FormField
+                            control={form.control}
+                            name={`currencies.${index}.buyRate`}
+                            render={({ field }) => (
+                              <FormControl>
+                                <Input placeholder="1.25" {...field} />
+                              </FormControl>
+                            )}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <FormField
+                            control={form.control}
+                            name={`currencies.${index}.sellRate`}
+                            render={({ field }) => (
+                              <FormControl>
+                                <Input placeholder="1.35" {...field} />
+                              </FormControl>
+                            )}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <FormField
+                            control={form.control}
+                            name={`currencies.${index}.notableRate`}
+                            render={({ field }) => (
+                              <FormControl>
+                                <Input placeholder="1.30" {...field} />
+                              </FormControl>
+                            )}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => remove(index)}
+                          >
+                            Remove
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
                 </TableBody>
               </Table>
             </div>
@@ -207,6 +238,7 @@ export default function AddTableDialog() {
                   buyRate: "",
                   sellRate: "",
                   notableRate: "",
+                  image: null,
                 })
               }
             >
