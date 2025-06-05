@@ -1,5 +1,3 @@
-import { ChevronDown } from "lucide-react";
-
 import { SidebarMenuButton } from "@/components/ui/sidebar";
 
 import {
@@ -22,7 +20,16 @@ import {
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-const SidebarHeader = () => {
+import jwt from "jsonwebtoken";
+import { cookies } from "next/headers";
+import { Button } from "@/components/ui/button";
+import LogoutButton from "./components/logoutbutton";
+
+const SidebarHeader = async () => {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+  const userInfo = token ? jwt.decode(token) : null;
+
   return (
     <SidebarMenu>
       <DropdownMenu>
@@ -36,8 +43,16 @@ const SidebarHeader = () => {
                       <User className="size-4" />
                     </div>
                     <div className="grid flex-1 text-left text-sm leading-tight">
-                      <span className="truncate font-medium">Alex</span>
-                      <span className="truncate text-xs">Kobaladze 8a</span>
+                      <span className="truncate font-medium">
+                        {typeof userInfo !== "string" && userInfo?.name
+                          ? userInfo.name
+                          : "Unknown"}
+                      </span>
+                      <span className="truncate text-xs">
+                        {typeof userInfo !== "string" && userInfo?.branch
+                          ? userInfo.branch
+                          : "Unknown"}
+                      </span>
                     </div>
                     <ChevronsUpDown className="ml-auto size-4" />
                   </a>
@@ -57,9 +72,15 @@ const SidebarHeader = () => {
                       <AvatarFallback className="rounded-lg">AT</AvatarFallback>
                     </Avatar>
                     <div className="grid flex-1 text-left text-sm leading-tight">
-                      <span className="truncate font-medium">{"Alex"}</span>
+                      <span className="truncate font-medium">
+                        {typeof userInfo !== "string" && userInfo?.name
+                          ? userInfo.name
+                          : "Unknown"}
+                      </span>
                       <span className="truncate text-xs">
-                        {"alexandretsetskhladze"}
+                        {typeof userInfo !== "string" && userInfo?.username
+                          ? userInfo.username
+                          : "Unknown"}
                       </span>
                     </div>
                   </div>
@@ -81,8 +102,7 @@ const SidebarHeader = () => {
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                  <LogOut />
-                  Log out
+                  <LogoutButton />
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

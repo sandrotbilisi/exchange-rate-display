@@ -4,13 +4,9 @@ import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { ModeToggle } from "@/components/ui/theme-switcher"
 import { Toaster } from "@/components/ui/sonner"
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar"
 
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+
+import { SidebarProvider } from "@/components/ui/sidebar"
 
 
 const geistSans = Geist({
@@ -44,7 +40,6 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {/* ✅ Now inside the ThemeProvider */}
           <div className="fixed top-4 right-4 z-50">
             <ModeToggle />
           </div>

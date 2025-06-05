@@ -21,7 +21,7 @@ const items = [
   },
   {
     title: "Branches",
-    url: "/branches",
+    url: "/dashboard/branches",
     icon: Building,
   },
   {
