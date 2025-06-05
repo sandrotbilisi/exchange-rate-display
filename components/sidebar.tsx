@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import {
   Sidebar,
   SidebarHeader,
@@ -9,7 +11,7 @@ import {
   SidebarGroupLabel,
   SidebarGroupContent,
 } from "@/components/ui/sidebar";
-import { Building, Home, Link, Table } from "lucide-react";
+import { Building, Home, Link as LinkIcon, Table } from "lucide-react";
 
 import SidebarHeaderCustom from "@/components/dashboard/sidebar/header";
 
@@ -32,7 +34,7 @@ const items = [
   {
     title: "Links",
     url: "/dashboard/links",
-    icon: Link,
+    icon: LinkIcon,
   },
 ];
 
@@ -50,10 +52,10 @@ const SidebarComponent = () => {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
+                    <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

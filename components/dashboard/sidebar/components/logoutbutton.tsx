@@ -12,6 +12,7 @@ const LogoutButton = () => {
     <button
       className="flex items-center gap-2"
       onClick={() => {
+        console.log("Logging out...");
         fetch("/api/logout")
           .then(() => {
             router.push("/login");
