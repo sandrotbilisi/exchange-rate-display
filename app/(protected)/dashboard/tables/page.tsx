@@ -1,6 +1,7 @@
 import SidebarComponent from "@/components/sidebar";
 import TableComponent from "./table";
 import AddTableDialog from "./addTableDialog";
+import TableForm from "./form";
 
 const LinksPage = () => {
   return (
@@ -10,7 +11,6 @@ const LinksPage = () => {
           <h2 className="text-xl font-semibold">Tables</h2>
           <AddTableDialog />
         </div>
-
         <TableComponent />
       </div>
     </div>

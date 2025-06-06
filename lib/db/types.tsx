@@ -16,7 +16,7 @@ export type Branch = {
 
 // types.ts
 export type RateTable = {
-  id: string;
+  id?: string;
   name: string;
   currencies: {
     code: string; // e.g. "USD"
@@ -26,6 +26,6 @@ export type RateTable = {
     notableRate: number;
     image: string | null;
   }[];
-  createdAt: string;
+  createdAt?: string;
   updatedAt?: string;
 };

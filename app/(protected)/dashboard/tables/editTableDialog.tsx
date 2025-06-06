@@ -1,10 +1,6 @@
-// AddTableDialog.tsx
 "use client";
 
 import { useState } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
   Dialog,
@@ -12,26 +8,35 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import TableForm from "./form";
 import { RateTable } from "@/lib/db/types";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 
-export default function AddTableDialog() {
+export default function EditTableDialog({ table }: { table: RateTable }) {
   const [open, setOpen] = useState(false);
+
+  console.log(table, "table");
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Create Table</Button>
+        <DropdownMenuItem
+          onSelect={(e) => {
+            e.preventDefault(); // ⛔ prevent dropdown from auto-closing
+            setOpen(true); // ✅ open dialog manually
+          }}
+        >
+          Edit Table
+        </DropdownMenuItem>
       </DialogTrigger>
 
       <DialogContent className="!max-w-3xl">
         <DialogHeader>
-          <DialogTitle>Create New Table</DialogTitle>
+          <DialogTitle>Edit Table</DialogTitle>
         </DialogHeader>
-        <TableForm setOpen={setOpen} table={null as unknown as RateTable} />
+        <TableForm setOpen={setOpen} table={table} />
       </DialogContent>
     </Dialog>
   );

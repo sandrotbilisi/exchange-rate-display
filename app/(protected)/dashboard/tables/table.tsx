@@ -36,245 +36,96 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { RateTable } from "@/lib/db/types";
+import { getTables } from "@/lib/api/tables/data";
 
-// import {  } from ''
-
-const data: RateTable[] = [
-  {
-    id: "m5gr84i9",
-    name: "Table 1",
-    currencies: [
-      {
-        code: "USD",
-        label: "United States Dollar",
-        buyRate: 1,
-        sellRate: 1,
-        notableRate: 1,
-        image: null,
-      },
-      {
-        code: "EUR",
-        label: "Euro",
-        buyRate: 1,
-        sellRate: 1,
-        notableRate: 1,
-        image: null,
-      },
-      {
-        code: "GBP",
-        label: "British Pound",
-        buyRate: 1,
-        sellRate: 1,
-        notableRate: 1,
-        image: null,
-      },
-    ],
-    createdAt: "2025-01-01",
-  },
-  {
-    id: "3u1reuv4",
-    name: "Table 2",
-    currencies: [
-      {
-        code: "USD",
-        label: "United States Dollar",
-        buyRate: 1,
-        sellRate: 1,
-        notableRate: 1,
-        image: null,
-      },
-      {
-        code: "EUR",
-        label: "Euro",
-        buyRate: 1,
-        sellRate: 1,
-        notableRate: 1,
-        image: null,
-      },
-      {
-        code: "GBP",
-        label: "British Pound",
-        buyRate: 1,
-        sellRate: 1,
-        notableRate: 1,
-        image: null,
-      },
-    ],
-    createdAt: "2025-01-01",
-  },
-  {
-    id: "derv1ws0",
-    name: "Table 3",
-    currencies: [
-      {
-        code: "USD",
-        label: "United States Dollar",
-        buyRate: 1,
-        sellRate: 1,
-        notableRate: 1,
-        image: null,
-      },
-      {
-        code: "EUR",
-        label: "Euro",
-        buyRate: 1,
-        sellRate: 1,
-        notableRate: 1,
-        image: null,
-      },
-      {
-        code: "GBP",
-        label: "British Pound",
-        buyRate: 1,
-        sellRate: 1,
-        notableRate: 1,
-        image: null,
-      },
-    ],
-    createdAt: "2025-01-01",
-  },
-  {
-    id: "5kma53ae",
-    name: "Table 4",
-    currencies: [
-      {
-        code: "USD",
-        label: "United States Dollar",
-        buyRate: 1,
-        sellRate: 1,
-        notableRate: 1,
-        image: null,
-      },
-      {
-        code: "EUR",
-        label: "Euro",
-        buyRate: 1,
-        sellRate: 1,
-        notableRate: 1,
-        image: null,
-      },
-      {
-        code: "GBP",
-        label: "British Pound",
-        buyRate: 1,
-        sellRate: 1,
-        notableRate: 1,
-        image: null,
-      },
-    ],
-    createdAt: "2025-01-01",
-  },
-  {
-    id: "bhqecj4p",
-    name: "Table 5",
-    currencies: [
-      {
-        code: "USD",
-        label: "United States Dollar",
-        buyRate: 1,
-        sellRate: 1,
-        notableRate: 1,
-        image: null,
-      },
-      {
-        code: "EUR",
-        label: "Euro",
-        buyRate: 1,
-        sellRate: 1,
-        notableRate: 1,
-        image: null,
-      },
-      {
-        code: "GBP",
-        label: "British Pound",
-        buyRate: 1,
-        sellRate: 1,
-        notableRate: 1,
-        image: null,
-      },
-    ],
-    createdAt: "2025-01-01",
-  },
-];
-
-export const columns: ColumnDef<RateTable>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "name",
-    header: "Name",
-    cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
-  },
-  {
-    accessorKey: "createdAt",
-    header: () => <div className="text-right">Created At</div>,
-    cell: ({ row }) => {
-      const date = row.getValue("createdAt");
-      // console.log("date : ", date.toLocaleDateString());
-      return <div className="text-right font-medium">{date}</div>;
-    },
-  },
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      const table = row.original;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(table.id)}
-            >
-              Copy Table ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Edit Table</DropdownMenuItem>
-            <DropdownMenuItem className="bg-red-500 text-white data-[highlighted]:bg-red-700 data-[highlighted]:text-white">
-              Delete Table
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
-  },
-];
+import { useEffect, useState } from "react";
+import EditTableDialog from "./editTableDialog";
 
 export default function TableComponent() {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
+  const [data, setData] = useState<RateTable[]>([]);
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
+
+  useEffect(() => {
+    const fetchTables = async () => {
+      const tables = await getTables();
+      setData(tables);
+    };
+    fetchTables();
+  }, []);
+
+  const columns: ColumnDef<RateTable>[] = [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      accessorKey: "name",
+      header: "Name",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("name")}</div>
+      ),
+    },
+    {
+      accessorKey: "createdAt",
+      header: () => <div className="text-right">Created At</div>,
+      cell: ({ row }) => {
+        const date = row.getValue("createdAt");
+        return <div className="text-right font-medium">{date}</div>;
+      },
+    },
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const table = row.original;
+
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() => navigator.clipboard.writeText(table.id ?? "")}
+              >
+                Copy Table ID
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <EditTableDialog table={table} />
+              <DropdownMenuItem className="bg-red-500 text-white data-[highlighted]:bg-red-700 data-[highlighted]:text-white">
+                Delete Table
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+  ];
 
   const table = useReactTable({
     data,
@@ -316,20 +167,16 @@ export default function TableComponent() {
             {table
               .getAllColumns()
               .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
+              .map((column) => (
+                <DropdownMenuCheckboxItem
+                  key={column.id}
+                  className="capitalize"
+                  checked={column.getIsVisible()}
+                  onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                >
+                  {column.id}
+                </DropdownMenuCheckboxItem>
+              ))}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
@@ -338,18 +185,16 @@ export default function TableComponent() {
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>
