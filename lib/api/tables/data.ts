@@ -25,7 +25,10 @@ export const addTable = async (table: RateTable): Promise<RateTable> => {
   return data;
 };
 
-export const editTable = async (id: string, table: RateTable): Promise<RateTable> => {
+export const editTable = async (
+  id: string,
+  table: RateTable
+): Promise<RateTable> => {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/${endpoint}/${id}`,
     {
@@ -41,6 +44,30 @@ export const editTable = async (id: string, table: RateTable): Promise<RateTable
     throw new Error(`Failed to edit table: ${res.statusText}`);
   }
 
+  const data = await res.json();
+  return data;
+};
+
+export const deleteTable = async (id: string): Promise<RateTable> => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/${endpoint}/${id}`,
+    {
+      method: "DELETE",
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error(`Failed to delete table: ${res.statusText}`);
+  }
+
+  const data = await res.json();
+  return data;
+};
+
+export const getTable = async (id: string): Promise<RateTable> => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/${endpoint}/${id}`
+  );
   const data = await res.json();
   return data;
 };

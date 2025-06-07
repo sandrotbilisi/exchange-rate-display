@@ -19,6 +19,25 @@ const mockImages = [
     src: "https://flagcdn.com/us.svg",
   },
   {
+    label: "AMD - Armenia Dram",
+    currency: "AMD",
+    country: "Armenia",
+    src: "https://flagcdn.com/am.svg",
+  },
+  {
+    label: "AZN - Azerbaijan Manat",
+    currency: "AZN",
+    country: "Azerbaijan",
+    src: "https://flagcdn.com/az.svg",
+  },
+  {
+    label: "KWD - Kuwait Dinar",
+    currency: "KWD",
+    country: "Kuwait",
+    src: "https://flagcdn.com/kw.svg",
+  },
+
+  {
     label: "EUR - Eurozone",
     currency: "EUR",
     country: "Eurozone",

@@ -23,7 +23,7 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import ImageSelector from "@/components/ui/ImageSelector";
-import { addTable } from "@/lib/api/tables/data";
+import { addTable, editTable } from "@/lib/api/tables/data";
 import { toast } from "sonner";
 import { RateTable } from "@/lib/db/types";
 
@@ -34,6 +34,7 @@ export default function TableForm({
   setOpen: (open: boolean) => void;
   table: RateTable | null;
 }) {
+  //   console.log("pick  :", table);
   const currencySchema = z.object({
     code: z.string().min(1, { message: "Required" }),
     label: z.string().min(1, { message: "Required" }),
@@ -71,12 +72,18 @@ export default function TableForm({
 
   const onSubmit = (data: FormValues) => {
     try {
-      addTable(data as unknown as RateTable);
-      toast.success("Table created successfully");
+      if (table) {
+        editTable(table._id as string, data as unknown as RateTable);
+        toast.success("Table updated successfully");
+      } else {
+        addTable(data as unknown as RateTable);
+        toast.success("Table created successfully");
+      }
+
       form.reset();
       setOpen(false);
     } catch (error) {
-      toast.error("Failed to create table");
+      toast.error(`Failed to ${table ? "update" : "create"} table`);
     }
   };
 
@@ -231,7 +238,11 @@ export default function TableForm({
         </Button>
 
         <DialogFooter>
-          <Button type="submit">Create Table</Button>
+          {table ? (
+            <Button type="submit">Update Table</Button>
+          ) : (
+            <Button type="submit">Create Table</Button>
+          )}
         </DialogFooter>
       </form>
     </Form>

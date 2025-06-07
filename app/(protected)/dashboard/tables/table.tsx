@@ -14,6 +14,7 @@ import {
   VisibilityState,
 } from "@tanstack/react-table";
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -40,6 +41,8 @@ import { getTables } from "@/lib/api/tables/data";
 
 import { useEffect, useState } from "react";
 import EditTableDialog from "./editTableDialog";
+import { deleteTable } from "@/lib/api/tables/data";
+import { toast } from "sonner";
 
 export default function TableComponent() {
   const [data, setData] = useState<RateTable[]>([]);
@@ -47,7 +50,7 @@ export default function TableComponent() {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
-
+  const router = useRouter();
   useEffect(() => {
     const fetchTables = async () => {
       const tables = await getTables();
@@ -111,13 +114,33 @@ export default function TableComponent() {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(table.id ?? "")}
+                onClick={() => navigator.clipboard.writeText(table._id ?? "")}
               >
                 Copy Table ID
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <EditTableDialog table={table} />
-              <DropdownMenuItem className="bg-red-500 text-white data-[highlighted]:bg-red-700 data-[highlighted]:text-white">
+
+              <DropdownMenuItem
+                onClick={() => {
+                  router.push(`/preview/tables/${table._id}`);
+                }}
+              >
+                Preview Table
+              </DropdownMenuItem>
+
+              <DropdownMenuItem
+                onClick={() => {
+                  try {
+                    deleteTable(table._id as string);
+                    toast.success("Table deleted successfully");
+                    setData(data.filter((t) => t._id !== table._id));
+                  } catch (error) {
+                    toast.error("Failed to delete table");
+                  }
+                }}
+                className="bg-red-500 text-white data-[highlighted]:bg-red-700 data-[highlighted]:text-white"
+              >
                 Delete Table
               </DropdownMenuItem>
             </DropdownMenuContent>
